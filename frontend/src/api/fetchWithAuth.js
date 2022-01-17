@@ -6,21 +6,18 @@ const checkEnspiration = (token) =>{
     }
 
 
-const fetchWithAuth = async (path, options) => {
+const fetchWithAuth = async (path, options = {}) => {
     if (!checkEnspiration(localStorage.getItem('access'))){
-        console.log('EXPIRE!')
-        let response = await fetch(baseUrl+'token/refresh/',
-            {
-                method: 'POST',
-                body:JSON.stringify({'refresh':localStorage.getItem('refresh')})
-            })
-        let updatedTokens = await response.json()
-        console.log(updatedTokens)
-        localStorage.setItem('access', updatedTokens.access)
-        localStorage.setItem('refresh', updatedTokens.refresh)
+        console.log('Token expired!')
+        let response = await fetch(baseUrl+'token/refresh/', {method: 'POST',
+        body: JSON.stringify({'refresh': localStorage.getItem('refresh')}),
+        headers: {'Content-type':'application/json'}}
+    )
+        let updatedToken = await response.json()
+        localStorage.setItem('access', updatedToken.access)
     }
     options.headers['Authorization'] = `Bearer ${localStorage.getItem('access')}`
-    let response = await fetch(path, options)
+    let response = await fetch(path,options)
     if (response.status !== 401){
         return response
     }
@@ -28,5 +25,4 @@ const fetchWithAuth = async (path, options) => {
     localStorage.removeItem('refresh')
 }
 
-// export const createFetchWithAuth = (cb) => (path, options) => fetchWithAuthInternal(path, options, cb);
 export {fetchWithAuth}

@@ -17,8 +17,9 @@ export const RegistrationPage = ()=>{
             method: 'POST',
             body: JSON.stringify({email, username, password})
         })
-        if (response.status === 200) {
-            navigate('/')
+        if (response.status === 201) {
+            console.log('Registered')
+            navigate('/',{replace: true})
         }
     }
     return (
