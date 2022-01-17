@@ -36,3 +36,26 @@ class Account(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = AccountManager()
+
+    def __str__(self):
+        return self.email
+
+
+class Video(models.Model):
+    owner = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='video')
+    title = models.CharField(max_length=255)
+    videofile = models.FileField(upload_to='video/')  # temporary solution
+
+    def __str__(self):
+        return self.title
+
+
+class Profile(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    surname = models.CharField(max_length=255, blank=True, null=True)
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='profile')
+    photo = models.FileField(blank=True, null=True, upload_to='photo/')
+    caption = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.account.username
