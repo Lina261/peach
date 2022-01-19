@@ -2,7 +2,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Profile
-from api.serializers import AccountSerializer
+from api.serializers import AccountSerializer, ProfileSerializer
 
 
 class RegisterAccount(APIView):
@@ -26,3 +26,24 @@ class HomePage(APIView):
     def get(self, request):
         account = request.user.username
         return Response({'user': account})
+
+
+class ProfileInfo(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+
+    def post(self, request):
+        profile_to_update = request.user.profile
+        serializer = ProfileSerializer(profile_to_update, request.data.get('userData'))
+        if serializer.is_valid():
+            saved = serializer.save()
+            if saved:
+                return Response(serializer.data)
+        print(serializer.errors)
+        return Response('error')
+
+
