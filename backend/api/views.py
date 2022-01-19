@@ -17,7 +17,7 @@ class RegisterAccount(APIView):
                 profile.save()
                 return Response(status=status.HTTP_201_CREATED)
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        return
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 class HomePage(APIView):
@@ -25,7 +25,7 @@ class HomePage(APIView):
 
     def get(self, request):
         account = request.user.username
-        return Response({'user': account})
+        return Response({'user': account})  # will be expanded
 
 
 class ProfileInfo(APIView):
@@ -44,6 +44,4 @@ class ProfileInfo(APIView):
             if saved:
                 return Response(serializer.data)
         print(serializer.errors)
-        return Response('error')
-
-
+        return Response(status=status.HTTP_403_FORBIDDEN)
