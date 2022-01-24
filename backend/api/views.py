@@ -2,7 +2,7 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Profile
-from api.serializers import AccountSerializer, ProfileSerializer
+from api.serializers import AccountSerializer, ProfileSerializer, HeaderInfoSerializer
 
 
 class RegisterAccount(APIView):
@@ -25,7 +25,9 @@ class HomePage(APIView):
 
     def get(self, request):
         account = request.user.username
-        return Response({'user': account})  # will be expanded
+        photo = request.user.profile.photo
+        serializer = HeaderInfoSerializer({'user': account, 'photo': photo})
+        return Response(serializer.data)  # will be expanded
 
 
 class ProfileInfo(APIView):

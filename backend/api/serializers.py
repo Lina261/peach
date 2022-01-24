@@ -54,3 +54,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         account.username = account_data.get('username', account.username)
         account.save()
         return instance
+
+
+class HeaderInfoSerializer(serializers.Serializer):
+        photo = serializers.FileField()
+        user = serializers.CharField()
