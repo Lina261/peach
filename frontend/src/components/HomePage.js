@@ -1,22 +1,27 @@
-import {useEffect, useState} from "react";
-import {fetchWithAuth} from "../api/fetchWithAuth";
-import {baseUrl} from "../constants";
-import {Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchWithAuth } from "../api/fetchWithAuth";
+import { baseUrl } from "../constants";
+import Header from "./Header";
+import CssBaseline from "@mui/material/CssBaseline";
+import * as React from "react";
 
+export const HomePage = () => {
+  const [userData, setUserData] = useState();
 
-export const HomePage = () =>{
-
-    const [userData, setUserData] = useState()
-
-    useEffect( () => {
-        fetchWithAuth(baseUrl + 'home/', {method: 'GET', headers:{}})
-            .then((response) =>  response.json())
-            .then((data) => {if(data){ setUserData(data.user)}});
-    }, [])
-    return (
-        <div>
-        <h1>Hi, {userData}!</h1>
-            <h3><Link to='/profile'> My profile </Link></h3>
-        </div>
-    )
-}
+  useEffect(() => {
+    fetchWithAuth(baseUrl + "home/", { method: "GET", headers: {} })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data) {
+          setUserData(data);
+        }
+      });
+  }, []);
+  return (
+    <div>
+      <CssBaseline />
+      <Header user={userData} />
+      <div>Everything will be done well :)</div>
+    </div>
+  );
+};
