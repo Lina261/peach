@@ -1,20 +1,21 @@
-import './App.css';
-import {RegistrationPage} from "./components/RegistrationPage";
-import {Route, Routes} from "react-router-dom";
-import {LoginPage} from "./components/LoginPage";
-import {HomePage} from "./components/HomePage";
+import { Route, Routes } from "react-router-dom";
+import { HomePage } from "./components/HomePage";
+import { ProfilePage } from "./components/ProfilePage";
+import SignIn from "./components/Sign-in";
+import SignUp from "./components/Sign-up";
 
 function App() {
   return (
     <div className="App">
-    <Routes>
-        <Route path={"/registration"} element={<RegistrationPage/>}/>
+      <Routes>
+        <Route path={"/sign-up"} element={<SignUp />} />
 
-        <Route path={"/"} element={<LoginPage/>}/>
+        <Route path={"/"} element={<SignIn />} />
 
-        <Route path={"/home"} element={<HomePage/>}/>
+        <Route path={"/home"} element={<HomePage />} />
 
-    </Routes>
+        <Route path={"/profile"} element={<ProfilePage />} />
+      </Routes>
     </div>
   );
 }
