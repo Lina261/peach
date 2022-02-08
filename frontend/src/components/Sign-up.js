@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { baseUrl } from "../constants";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Copyright(props) {
   return (
@@ -34,18 +34,76 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [errorMessage, setErrorMessage] = useState({
+    email: "",
+    password: "",
+    username: "",
+  });
+
+  const checkEmail = () => {
+    const isValid = (() => {
+      if (email.length < 10) {
+        return false;
+      }
+      // debugger;
+      return email.match(/\S+@\S+\.\S+/);
+    })();
+    // !(email.length < 10 || email.length > 30) && email.match(/\S+@\S+\.\S+/);
+
+    setErrorMessage((errorMessage) => ({
+      ...errorMessage,
+      email: isValid
+        ? ""
+        : "Enter correct email. Email should contain '@'. Enter email address with length 10-30 symbols.",
+    }));
+    return isValid;
+  };
+
+  const checkUsername = () => {
+    if (username.length < 3) {
+      setErrorMessage({
+        ...errorMessage,
+        username: "Too short name",
+      });
+      return false;
+    } else if (username.length > 30) {
+      setErrorMessage({
+        ...errorMessage,
+        username: "Too long name",
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const checkPassword = () => {
+    if (!password.match("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
+      setErrorMessage({
+        ...errorMessage,
+        password:
+          "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const validated = () => {
+    return checkEmail() && checkUsername() && checkPassword();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, username, password);
-    const response = await fetch(baseUrl + "register/", {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ email, username, password }),
-    });
-    if (response.status === 201) {
-      console.log("Registered");
-      navigate("/", { replace: true });
+    if (validated()) {
+      const response = await fetch(baseUrl + "register/", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ email, username, password }),
+      });
+      if (response.status === 201) {
+        console.log("Registered");
+        navigate("/", { replace: true });
+      }
     }
   };
 
@@ -75,6 +133,8 @@ export default function SignUp() {
             id="email"
             label="Email Address"
             name="email"
+            error={!!errorMessage.email}
+            helperText={errorMessage.email}
             autoFocus
             onChange={(e) => {
               setEmail(e.target.value);
@@ -87,6 +147,8 @@ export default function SignUp() {
             id="username"
             label="Username"
             name="username"
+            error={!!errorMessage.username}
+            helperText={errorMessage.username}
             onChange={(e) => {
               setUsername(e.target.value);
             }}
@@ -99,6 +161,8 @@ export default function SignUp() {
             label="Password"
             type="password"
             id="password"
+            error={!!errorMessage.password}
+            helperText={errorMessage.password}
             autoComplete="current-password"
             onChange={(e) => {
               setPassword(e.target.value);

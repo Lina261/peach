@@ -16,14 +16,16 @@ import { useNavigate } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import { InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import LogoutDialog from "./LogoutDialog";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Profile", "Settings", "Logout"];
+const pages = ["Home", "Profile", "People"];
+const settings = ["Settings", "Logout"];
 
 const Header = (props) => {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [open, setopen] = useState(false);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -33,8 +35,14 @@ const Header = (props) => {
   };
 
   const handleCloseNavMenu = (e) => {
-    navigate("/profile");
-    setAnchorElNav(null);
+    let linkToNavigate = e.currentTarget.textContent;
+    console.log(linkToNavigate);
+    if (linkToNavigate == "Logout") {
+      setopen(true);
+    } else {
+      navigate("/" + linkToNavigate.toLowerCase());
+      setAnchorElNav(null);
+    }
   };
 
   const handleCloseUserMenu = () => {
@@ -153,7 +161,7 @@ const Header = (props) => {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Find video…"
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
@@ -200,6 +208,7 @@ const Header = (props) => {
           </Box>
         </Toolbar>
       </Container>
+      <LogoutDialog open={open} setOpen={setopen} />
     </AppBar>
   );
 };

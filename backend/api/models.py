@@ -56,6 +56,8 @@ class Profile(models.Model):
     account = models.OneToOneField(Account, on_delete=models.CASCADE, related_name='profile')
     photo = models.FileField(blank=True, null=True, upload_to='photo/')
     caption = models.CharField(max_length=255, blank=True, null=True)
+    followers = models.ManyToManyField('self', related_name='subscribers', blank=True, null=True, symmetrical=False)
+    follows = models.ManyToManyField('self', related_name='subscribes', blank=True, null=True, symmetrical=False)
 
     def __str__(self):
         return self.account.username
