@@ -21,7 +21,7 @@ export const HomePage = () => {
     <div>
       <CssBaseline />
       <Header user={userData} />
-      <div>Everything will be done well :)</div>
+      <div>hi!</div>
     </div>
   );
 };
