@@ -2,7 +2,8 @@ from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Profile
-from api.serializers import AccountSerializer, ProfileSerializer, HeaderInfoSerializer
+from api.serializers import AccountSerializer, ProfileSerializer, HeaderInfoSerializer, PageSerializer, \
+    PeoplePageSerializer
 
 
 class RegisterAccount(APIView):
@@ -47,3 +48,18 @@ class ProfileInfo(APIView):
                 return Response(serializer.data)
         print(serializer.errors)
         return Response(status=status.HTTP_403_FORBIDDEN)
+
+class ProfilePage(APIView):
+
+    def get(self, request):
+        profile = request.user.profile
+        serializer = PageSerializer(profile)
+        return Response(serializer.data)
+
+class PeoplePage(APIView):
+
+    def get(self, request):
+        profile = request.user.profile
+        people = Profile.objects.exclude(account__username=profile.account.username)
+        serializer = PeoplePageSerializer(people, many=True)
+        return Response(serializer.data)

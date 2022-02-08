@@ -1,6 +1,6 @@
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from rest_framework import serializers
-from .models import Account, Profile
+from .models import Account, Profile, Video
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -41,7 +41,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('name', 'surname', 'caption', 'account', 'photo')
+        fields = ('name', 'surname', 'caption', 'account', 'photo', 'followers', 'follows')
         extra_kwargs = {'photo': {'read_only': True}}
 
     def update(self, instance, validated_data):
@@ -57,5 +57,37 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class HeaderInfoSerializer(serializers.Serializer):
-        photo = serializers.FileField()
-        user = serializers.CharField()
+    photo = serializers.FileField()
+    user = serializers.CharField()
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ('title', 'videofile')
+
+
+class PageSerializer(serializers.ModelSerializer):
+    account = AccountInfoSerializer()
+    followers = serializers.SerializerMethodField('get_followers')
+    follows = serializers.SerializerMethodField('get_follows')
+    video = VideoSerializer(many=True)
+
+    def get_followers(self, profile):
+        return profile.followers.count()
+
+    def get_follows(self, profile):
+        return profile.follows.count()
+
+    class Meta:
+        model = Profile
+        fields = ('name', 'surname', 'caption', 'account', 'photo', 'followers', 'follows', 'video')
+        extra_kwargs = {'photo': {'read_only': True}}
+
+
+class PeoplePageSerializer(serializers.ModelSerializer):
+    account = AccountSerializer()
+
+    class Meta:
+        model = Profile
+        fields = ('account', 'caption', 'photo')
