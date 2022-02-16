@@ -1,11 +1,12 @@
 import json
 
 from rest_framework import permissions, status
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Profile
+from .models import Profile, Video
 from api.serializers import AccountSerializer, ProfileSerializer, HeaderInfoSerializer, PageSerializer, \
-    PeopleSerializer, FollowersSerializer
+    PeopleSerializer, FollowersSerializer, VideoSerializer
 
 
 class RegisterAccount(APIView):
@@ -115,3 +116,11 @@ class Followers(APIView):
         serializer = FollowersSerializer(people, context={'follows': follows}, many=True)
         return Response(serializer.data)
 
+
+class VideoView(ListAPIView):
+
+    serializer_class = VideoSerializer
+
+    def get_queryset(self):
+        profile = self.request.user.profile
+        return Video.objects.exclude(owner=profile)

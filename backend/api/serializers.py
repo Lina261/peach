@@ -64,7 +64,7 @@ class HeaderInfoSerializer(serializers.Serializer):
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = ('title', 'videofile')
+        fields = ('__all__')
 
 
 class PageSerializer(serializers.ModelSerializer):
