@@ -11,9 +11,13 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from 'react-alert'
 
 export const SettingsPage = () => {
   const navigate = useNavigate();
+  const alert = useAlert();
+
+
   const updateProfile = (e) => {
     e.preventDefault();
     fetchWithAuth(baseUrl + "user-info/", {
@@ -23,9 +27,16 @@ export const SettingsPage = () => {
     })
       .then((response) => {
         if (response.ok) {
-          console.log(response.json());
-          navigate("/home", { replace: true });
+          alert.show("Profile updated!!!")
+          setTimeout(() => navigate("/profile", { replace: true }), 500);
         }
+        else{
+        alert.show("Something went wrong...",{
+            timeout: 2000,
+            type: 'error'}
+        )
+        setTimeout(() => navigate("/profile", { replace: true }), 500);}
+
       })
       .then((data) => {
         console.log(data);

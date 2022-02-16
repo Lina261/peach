@@ -4,6 +4,17 @@ import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
+import { transitions, positions, Provider as AlertProvider } from 'react-alert'
+import AlertTemplate from 'react-alert-template-basic'
+
+
+const options = {
+  position: positions.TOP_CENTER,
+  timeout: 5000,
+  offset: '30px',
+  type: 'success',
+  transition: transitions.SCALE
+}
 
 const theme = createTheme({
   palette: {
@@ -27,10 +38,14 @@ const theme = createTheme({
 });
 
 ReactDOM.render(
+<AlertProvider template={AlertTemplate} {...options}>
   <ThemeProvider theme={theme}>
     <Router>
       <App />
     </Router>
-  </ThemeProvider>,
+  </ThemeProvider>
+  </AlertProvider>
+,
+
   document.getElementById("root")
 );
