@@ -85,7 +85,19 @@ class PageSerializer(serializers.ModelSerializer):
         extra_kwargs = {'photo': {'read_only': True}}
 
 
-class PeoplePageSerializer(serializers.ModelSerializer):
+class FollowersSerializer(serializers.ModelSerializer):
+    account = AccountSerializer()
+    subscribe_status = serializers.SerializerMethodField('get_status')
+
+    def get_status(self, profile):
+        return profile in self.context.get('follows')
+
+    class Meta:
+        model = Profile
+        fields = ('account', 'caption', 'photo', 'subscribe_status')
+
+
+class PeopleSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
 
     class Meta:
