@@ -17,6 +17,7 @@ import { styled, alpha } from "@mui/material/styles";
 import { InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LogoutDialog from "./LogoutDialog";
+import { baseUrl, mediaUrl } from "../constants";
 
 const pages = ["Home", "Profile", "People"];
 const settings = ["Settings", "Logout"];
@@ -174,11 +175,11 @@ const Header = (props) => {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {props.user?.photo ? (
                   <Avatar
-                    src={"http://127.0.0.1:8000" + props.user.photo} //will be changed
+                    src={mediaUrl + props.user.photo} //will be changed
                     alt="photo"
                   />
                 ) : (
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar src="/static/images/avatar/2.jpg" />
                 )}
               </IconButton>
             </Tooltip>

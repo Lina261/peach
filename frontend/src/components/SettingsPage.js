@@ -89,15 +89,14 @@ export const SettingsPage = () => {
         >
           {userData.photo ? (
             <Avatar
-              src={"http://127.0.0.1:8000" + userData.photo} //will be changed
+              src={"http://127.0.0.1:8000" + userData.photo}
               alt="photo"
               sx={{ width: 250, height: 250, margin: "20px" }}
             />
           ) : (
             <Avatar
-              alt="Remy Sharp"
               src="/static/images/avatar/2.jpg"
-              sx={{ width: 56, height: 56 }}
+              sx={{ width: 250, height: 250, margin: "20px"  }}
             />
           )}
           <Button variant="text" component="label">

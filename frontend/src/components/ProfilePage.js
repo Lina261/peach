@@ -5,10 +5,15 @@ import Header from "./Header";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import { fetchWithAuth } from "../api/fetchWithAuth";
-import { baseUrl, photoUrl } from "../constants";
+import { baseUrl, mediaUrl } from "../constants";
 import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import { Player } from 'video-react';
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -24,7 +29,6 @@ export const ProfilePage = () => {
     video: [],
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchWithAuth(baseUrl + "profile/", { method: "GET", headers: {} })
       .then((response) => {
@@ -34,7 +38,7 @@ export const ProfilePage = () => {
       })
       .then((data) => {
         if (data) {
-          console.log(data);
+          console.log("VIDEO",data.video);
           setUserData(data);
         }
       });
@@ -56,15 +60,14 @@ export const ProfilePage = () => {
       >
         {userData.photo ? (
           <Avatar
-            src={photoUrl + userData.photo}
+            src={mediaUrl + userData.photo}
             alt="photo"
             sx={{ width: 250, height: 250, margin: "20px" }}
           />
         ) : (
           <Avatar
-            alt="Remy Sharp"
             src="/static/images/avatar/2.jpg"
-            sx={{ width: 56, height: 56 }}
+            sx={{ width: 250, height: 250, margin: "20px" }}
           />
         )}
         <Typography>
@@ -102,17 +105,33 @@ export const ProfilePage = () => {
             justifyItems: "center",
             display: "grid",
             gridTemplateColumns: "300px 300px 300px",
+            gridGap: "20px 0",
             width: "100%",
           }}
           maxWidth="md"
         >
-          {userData.video.map((video) => (
-            <video width="280" height="240" controls>
-              <source src={photoUrl + video.videofile} type="video/mp4" />
-            </video>
-          ))}
+        {userData.video.length ? (
+          userData.video.map((video) => (
+            <div style={{backgroundColor: 'black'}}>
+                <video width="280" style={{marginBottom: 0}} controls>
+                  <source src={mediaUrl + video.videofile} type="video/mp4" />
+                </video>
+                <div style={{backgroundColor: 'black', marginLeft: "10px"}}>
+                    <Typography sx={{color:"white", fontWeight:"bold", fontStyle: "italic", paddingBottom: "5px"}}>{video.title}</Typography>
+                </div>
+            </div>
+          ))) :
+          <Container sx={{gridColumnStart: "2", textAlign:"center", marginTop:"30px"}}>
+            <Typography variant="overline" sx={{ fontSize:"15px"}}>No video yet </Typography>
+          </Container>
+          }
+
         </Container>
+
       </Container>
+       <Fab  sx={{ position:"fixed", right: "40px", bottom: "40px"}} color="secondary" aria-label="add">
+            <AddIcon />
+          </Fab>
     </div>
   );
 };

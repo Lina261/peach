@@ -4,7 +4,7 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import { fetchWithAuth } from "../api/fetchWithAuth";
-import { baseUrl, photoUrl } from "../constants";
+import { baseUrl, mediaUrl } from "../constants";
 import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
@@ -63,7 +63,7 @@ return (
           <CssBaseline />
             {user.photo ? (
               <Avatar
-                src={photoUrl + user.photo}
+                src={mediaUrl + user.photo}
                 alt="photo"
                 sx={{ width: 150, height: 150, margin: "20px" }}
               />
