@@ -12,7 +12,7 @@ import Link from "@mui/material/Link";
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
-
+  const subscribeStatus = true
   const [userData, setUserData] = useState({
     name: "",
     surname: "",
@@ -85,10 +85,11 @@ export const ProfilePage = () => {
             gridTemplateColumns: "100px 100px",
           }}
         >
-          <Link href="#" underline="none">
+          <Link href="/followers"
+             underline="none">
             Followers
           </Link>
-          <Link href="#" underline="none">
+          <Link href="/follows" underline="none">
             Follows
           </Link>
           <Typography>{userData.followers}</Typography>

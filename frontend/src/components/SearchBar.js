@@ -56,15 +56,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   return (
     <Box>
       <AppBar
-        sx={{ flexGrow: 1, backgroundColor: "#5b3e5b" }}
+        sx={{ flexGrow: 2, backgroundColor: "#5b3e5b" }}
         position="static"
       >
         <Toolbar>
-          <Search sx={{ marginLeft: 100 }}>
+        <Typography variant = 'overline' sx={{marginLeft:"30px", fontSize:"20px"}} > {props.title}</Typography>
+          <Search >
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>

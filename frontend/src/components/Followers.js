@@ -2,12 +2,12 @@ import { CssBaseline } from "@mui/material";
 import {PeopleItem} from "./PeopleItem";
 import {PeopleList} from "./PeopleList";
 
-export const PeoplePage = () => {
+export const Followers = () => {
 
   return (
     <div>
       <CssBaseline />
-      <PeopleList title="People" apiPoint = 'people/' subscribeStatus={false}  />
+      <PeopleList title="Followers" apiPoint = 'followers/' />
     </div>
   );
 };

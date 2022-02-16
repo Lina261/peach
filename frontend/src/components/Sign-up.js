@@ -9,46 +9,41 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { baseUrl } from "../constants";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import { useState } from "react";
 
 export default function SignUp() {
   let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [apiError, setApiError] = useState("");
   const [errorMessage, setErrorMessage] = useState({
     email: "",
     password: "",
     username: "",
   });
 
+  const justifyApiError = (message) => {
+    return message.charAt(0).toUpperCase() + message.slice(1);
+  };
+
+  const setErrorsFromBackend = (errors, field) => {
+    // eslint-disable-next-line no-unused-expressions
+    errors.field
+      ? setErrorMessage((errorMessage) => ({
+          ...errorMessage,
+          field: justifyApiError(errors.field[0]),
+        }))
+      : "";
+  };
+
   const checkEmail = () => {
     const isValid = (() => {
       if (email.length < 10) {
         return false;
       }
-      // debugger;
       return email.match(/\S+@\S+\.\S+/);
     })();
-    // !(email.length < 10 || email.length > 30) && email.match(/\S+@\S+\.\S+/);
 
     setErrorMessage((errorMessage) => ({
       ...errorMessage,
@@ -60,32 +55,33 @@ export default function SignUp() {
   };
 
   const checkUsername = () => {
-    if (username.length < 3) {
-      setErrorMessage({
-        ...errorMessage,
-        username: "Too short name",
-      });
-      return false;
-    } else if (username.length > 30) {
-      setErrorMessage({
-        ...errorMessage,
-        username: "Too long name",
-      });
-      return false;
-    }
-    return true;
+    const isValid = (() => {
+      if (username.length < 4) {
+        return false;
+      }
+      return username.length < 30;
+    })();
+
+    setErrorMessage((errorMessage) => ({
+      ...errorMessage,
+      username: isValid ? "" : "Enter username with length 4-30 symbols.",
+    }));
+    return isValid;
   };
 
   const checkPassword = () => {
-    if (!password.match("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}")) {
-      setErrorMessage({
-        ...errorMessage,
-        password:
-          "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
-      });
-      return false;
-    }
-    return true;
+    const isValid = (() => {
+      console.log(password);
+      return password.match("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}");
+    })();
+
+    setErrorMessage((errorMessage) => ({
+      ...errorMessage,
+      password: isValid
+        ? ""
+        : "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+    }));
+    return isValid;
   };
 
   const validated = () => {
@@ -103,6 +99,26 @@ export default function SignUp() {
       if (response.status === 201) {
         console.log("Registered");
         navigate("/", { replace: true });
+      } else {
+        const errorsInfo = await response.json();
+        if (errorsInfo.email) {
+          setErrorMessage((errorMessage) => ({
+            ...errorMessage,
+            email: justifyApiError(errorsInfo.email[0]),
+          }));
+        }
+        if (errorsInfo.username) {
+          setErrorMessage((errorMessage) => ({
+            ...errorMessage,
+            username: justifyApiError(errorsInfo.username[0]),
+          }));
+        }
+        if (errorsInfo.password) {
+          setErrorMessage((errorMessage) => ({
+            ...errorMessage,
+            password: justifyApiError(errorsInfo.password[0]),
+          }));
+        }
       }
     }
   };
@@ -179,17 +195,16 @@ export default function SignUp() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
+              <Link href="/" variant="body2">
+                Go back
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/sign-up"> Create account </Link>
+              {/*<Link href="/sign-up"> Create account </Link>*/}
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 }

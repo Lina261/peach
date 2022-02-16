@@ -15,6 +15,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +29,8 @@ export default function SignIn() {
       localStorage.setItem("access", tokens.access);
       localStorage.setItem("refresh", tokens.refresh);
       navigate("/home", { replace: true });
+    } else {
+      setErrorMessage("Email or password is invalid");
     }
   };
 
@@ -51,7 +54,17 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ mt: 1, textAlign: "center" }}
+        >
+          {errorMessage ? (
+            <Typography sx={{ color: "red" }}> {errorMessage}</Typography>
+          ) : (
+            ""
+          )}
           <TextField
             margin="normal"
             required
@@ -60,6 +73,7 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            error={!!errorMessage}
             autoFocus
             onChange={(e) => {
               setEmail(e.target.value);
@@ -72,6 +86,7 @@ export default function SignIn() {
             name="password"
             label="Password"
             type="password"
+            error={!!errorMessage}
             id="password"
             onChange={(e) => {
               setPassword(e.target.value);
@@ -83,9 +98,9 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+              {/*<Link href="#" variant="body2">*/}
+              {/*  Forgot password?*/}
+              {/*</Link>*/}
             </Grid>
             <Grid item>
               <Link href="/sign-up" variant="body2">

@@ -6,6 +6,8 @@ import SignIn from "./components/Sign-in";
 import SignUp from "./components/Sign-up";
 import LogoutDialog from "./components/LogoutDialog";
 import { PeoplePage } from "./components/PeoplePage";
+import { Follows } from "./components/Follows";
+import { Followers } from "./components/Followers";
 
 function App() {
   return (
@@ -22,6 +24,12 @@ function App() {
         <Route path={"/profile"} element={<ProfilePage />} />
 
         <Route path={"/people"} element={<PeoplePage />} />
+
+        <Route path={"/follows"} element={<Follows />} />
+
+        <Route path={"/followers"} element={<Followers />} />
+
+
       </Routes>
     </div>
   );
