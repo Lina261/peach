@@ -8,6 +8,7 @@ import LogoutDialog from "./components/LogoutDialog";
 import { PeoplePage } from "./components/PeoplePage";
 import { Follows } from "./components/Follows";
 import { Followers } from "./components/Followers";
+import { DetailProfile } from "./components/DetailProfile";
 
 function App() {
   return (
@@ -23,12 +24,13 @@ function App() {
 
         <Route path={"/profile"} element={<ProfilePage />} />
 
+        <Route path={"/profile/:id"} element={<DetailProfile />} />
+
         <Route path={"/people"} element={<PeoplePage />} />
 
         <Route path={"/follows"} element={<Follows />} />
 
         <Route path={"/followers"} element={<Followers />} />
-
 
       </Routes>
     </div>

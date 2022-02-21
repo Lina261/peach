@@ -15,6 +15,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { fetchWithAuth } from "../api/fetchWithAuth";
+import { baseUrl } from "../constants";
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -55,6 +58,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+
+
+
 export default function SearchBar(props) {
   return (
     <Box>
@@ -69,6 +75,7 @@ export default function SearchBar(props) {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              onKeyDown = {(e)=>{ if (e.key === 'Enter')  {props.findAccount(e.target.value)}}}
               placeholder="Search account…"
               inputProps={{ "aria-label": "search" }}
             />

@@ -19,6 +19,31 @@ export const PeopleList = (props) => {
   const apiPoint = props.apiPoint
   const subscribeStatus = props.subscribeStatus
 
+
+  const findAccount=(account) => {
+    console.log("TO FIND", account)
+    fetchWithAuth(baseUrl + "find-account/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({'account':account}),
+    })
+      .then((response) => {
+        if (response.ok) {
+            return response.json()
+
+        .then((data) => {
+            if (data) {
+              setData(data);
+            }
+      });}
+        else{
+            console.log(response.status)
+        }
+        })
+
+
+}
+
   useEffect(() => {
     fetchWithAuth(baseUrl + apiPoint, { method: "GET", headers: {} })
       .then((response) => {
@@ -32,6 +57,7 @@ export const PeopleList = (props) => {
           setData(data);
         }
       });
+
     fetchWithAuth(baseUrl + "home/", { method: "GET", headers: {} })
       .then((response) => {
         if (response.ok) {
@@ -48,8 +74,8 @@ export const PeopleList = (props) => {
   return (
     <div>
       <CssBaseline />
-      <Header user={userData} />
-      <SearchBar title = {props.title} />
+      <Header user={userData}  />
+      <SearchBar title = {props.title} findAccount = {findAccount} />
       <Container
         sx={{
           width: "45%",
@@ -58,9 +84,10 @@ export const PeopleList = (props) => {
           display: "flex",
           flexDirection: "column",
         }}
+        key={data.length}
       >
         {data.map((user) => (
-          <PeopleItem user={user} subscribeStatus={subscribeStatus} />
+          <PeopleItem user={user} key={user.account.id} subscribeStatus={subscribeStatus} />
         ))}
       </Container>
     </div>

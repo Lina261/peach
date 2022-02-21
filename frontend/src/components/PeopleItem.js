@@ -78,9 +78,9 @@ return (
                 marginTop: "15px",
               }}
             >
-              <Typography variant="h5" sx={{}}>
+              <Link href= {`profile/${user.account.id}`} variant="h5" underline="none" sx={{}}>
                 {user.account.username}
-              </Typography>
+              </Link>
               <Typography
                 sx={{
                   color: "white",
