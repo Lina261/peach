@@ -1,5 +1,5 @@
 import json
-
+from rest_framework import viewsets
 from rest_framework import permissions, status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -118,9 +118,28 @@ class Followers(APIView):
 
 
 class VideoView(ListAPIView):
-
     serializer_class = VideoSerializer
 
     def get_queryset(self):
         profile = self.request.user.profile
         return Video.objects.exclude(owner=profile)
+
+
+class ProfileDetail(APIView):
+    def get(self, request, id):
+        profile = Profile.objects.get(account__id=id)
+        serializer = PageSerializer(profile)
+        return Response(serializer.data)
+
+
+class FindAccount(APIView):
+
+    def post(self, request):
+        account = request.data.get('account')
+        follows = request.user.profile.follows.all()
+        result = Profile.objects.exclude(account__username=request.user.profile).exclude(id__in=follows)\
+            .filter(account__username__contains=account)
+        if result:
+            serializer = PeopleSerializer(result, many=True)
+            return Response(serializer.data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
