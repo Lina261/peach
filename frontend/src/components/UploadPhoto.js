@@ -19,35 +19,32 @@ import { useAlert } from 'react-alert'
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
 
-
-export default function DialogComponent(props) {
+export default function UploadPhotoComponent(props) {
   const [fileStatus, setFileStatus] = useState('')
-  const [selectedVideo, setSelectedVideo] = useState();
+  const [selectedPhoto, setSelectedPhoto] = useState();
   const [errorMessage, setErrorMessage] = useState('');
-  const [title, setTitle] = useState('');
   const alert = useAlert();
 
    useEffect(() => {
-    if (selectedVideo){
-        setFileStatus('✓ Video added')
+    if (selectedPhoto){
+        setFileStatus('✓ Photo added')
         }
-      }, [selectedVideo]);
+      }, [selectedPhoto]);
 
 
 
-    const saveVideo = () =>{
-        if (selectedVideo && title ){
+    const savePhoto = () =>{
+        if (selectedPhoto){
            const formData = new FormData();
-           formData.append('video', selectedVideo);
-           formData.append('title', title);
-           fetchWithAuth(baseUrl + "upload-video/", {
+           formData.append('photo', selectedPhoto);
+           fetchWithAuth(baseUrl + "upload-photo/", {
               method: "POST",
               headers: { 'Accept': "application/json, text/plain, */*" },
               body: formData,
            })
               .then((response) => {
                 if (response.ok) {
-                    alert.show("Video added successfully!")
+                    alert.show("Photo added successfully!")
                 }
                 else{
                    alert.show("Error... Try later.",{
@@ -62,7 +59,6 @@ export default function DialogComponent(props) {
             props.open(false)
         }
         else{
-            selectedVideo || setErrorMessage('Video title is required');
             fileStatus || setFileStatus('You have not selected any file');
         }
 }
@@ -70,10 +66,10 @@ export default function DialogComponent(props) {
 
 return(
 <div>
-    <DialogTitle variant='overline' sx = {{fontSize: "15px"}}>{"Upload your video"}</DialogTitle>
+    <DialogTitle variant='overline' sx = {{fontSize: "15px", marginBottom:"10px"}}>{"Upload photo"}</DialogTitle>
 
     <Container sx={{display:'flex', flexDirection:"column", alignItems:"center"}}>
-            <input  type = 'file' id="select-image" style={{ display: "none" }} onChange={e => setSelectedVideo(e.target.files[0])}/>
+            <input  type = 'file' id="select-image" style={{ display: "none" }} onChange={e => setSelectedPhoto(e.target.files[0])}/>
 
          <label htmlFor="select-image">
             <Button variant="contained" color="secondary" component="span">
@@ -82,20 +78,14 @@ return(
             </Button>
           </label>
           <Container sx={{height:"20px", maxHeight:"20px"}}>
-                    <Typography sx = {{color: selectedVideo? "green" :"red", fontSize:"15px"}}> {fileStatus}</Typography>
+                    <Typography sx = {{color: selectedPhoto? "green" :"red", fontSize:"15px"}}> {fileStatus}</Typography>
           </Container>
-          <TextField
-        helperText={errorMessage}
-        error={errorMessage}
-        onChange={(e) => {setTitle(e.target.value);}}
-        label="Title" variant="standard" required sx = {{width:'200px', margin:'5px'}} > Add your video here</TextField>
+
         <DialogActions sx = {{alignItems:"center", marginTop:"20px"}}>
       <Button variant="outlined"  onClick={() => {props.open(false)}}>Cancel</Button>
-      <Button variant="outlined"  onClick={saveVideo}>Save</Button>
+      <Button variant="outlined"  onClick={savePhoto}>Save</Button>
     </DialogActions>
     </Container>
-
-
    </div>
 )
 }

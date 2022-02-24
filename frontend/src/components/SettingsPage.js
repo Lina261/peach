@@ -3,6 +3,7 @@ import { fetchWithAuth } from "../api/fetchWithAuth";
 import { baseUrl } from "../constants";
 import { CssBaseline, TextField } from "@mui/material";
 import Header from "./Header";
+import UploadPhoto from "./UploadPhoto";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import * as React from "react";
@@ -12,10 +13,27 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from 'react-alert'
+import DialogComponent from "./DialogComponent";
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 
 export const SettingsPage = () => {
   const navigate = useNavigate();
   const alert = useAlert();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
 
   const updateProfile = (e) => {
@@ -53,6 +71,7 @@ export const SettingsPage = () => {
     followers: "",
   });
 
+
   useEffect(() => {
     fetchWithAuth(baseUrl + "user-info/", { method: "GET", headers: {} })
       .then((response) => response.json())
@@ -75,7 +94,6 @@ export const SettingsPage = () => {
         sx={{
           display: "flex",
           flexDirection: "row",
-          // flex: 1,
           width: "100%",
         }}
       >
@@ -99,9 +117,8 @@ export const SettingsPage = () => {
               sx={{ width: 250, height: 250, margin: "20px"  }}
             />
           )}
-          <Button variant="text" component="label">
+          <Button variant="text" component="label" onClick={handleClickOpen}>
             Change photo
-            <input type="file" hidden />
           </Button>
         </Container>
 
@@ -172,6 +189,14 @@ export const SettingsPage = () => {
         >
           Save
         </Button>
+        <Dialog
+            PaperProps={{ sx: { width: "20%",  height: "230px" , maxHeight:"230px", textAlign: "center"} }}
+            open={open}
+            TransitionComponent={Transition}
+            onClose={handleClose}
+        >
+          <UploadPhoto open={setOpen}  />
+       </Dialog>
       </Container>
     </div>
   );

@@ -32,7 +32,7 @@ export default function UploadVideo(props) {
          </Fab>
 
         <Dialog
-            PaperProps={{ sx: { width: "20%", height: "350px" , textAlign: "center"} }}
+            PaperProps={{ sx: { width: "20%", height: "280px" , textAlign: "center"} }}
             open={open}
             TransitionComponent={Transition}
             onClose={handleClose}

@@ -11,6 +11,8 @@ import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import SearchBar from "./SearchBar";
 import {PeopleItem} from "./PeopleItem";
+import SentimentDissatisfiedSharpIcon from '@mui/icons-material/SentimentDissatisfiedSharp';
+
 
 export const PeopleList = (props) => {
   const navigate = useNavigate();
@@ -36,7 +38,8 @@ export const PeopleList = (props) => {
               setData(data);
             }
       });}
-        else{
+         else{
+            setData('')
             console.log(response.status)
         }
         })
@@ -86,9 +89,14 @@ export const PeopleList = (props) => {
         }}
         key={data.length}
       >
-        {data.map((user) => (
+      {data?
+        data.map((user) => (
           <PeopleItem user={user} key={user.account.id} subscribeStatus={subscribeStatus} />
-        ))}
+        )) :
+        <Container sx={{margin:"150px", display:"flex", flexDirection:"row", alignItems:"center", justifyContent: "center"}}>
+        <SentimentDissatisfiedSharpIcon  sx={{fontSize:"80px"}}/>
+        <Typography  sx={{margin:"20px", fontSize:"20px"}} >Nothing was found</Typography>
+        </Container>}
       </Container>
     </div>
   );

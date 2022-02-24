@@ -21,7 +21,6 @@ export const DetailProfile = (props) => {
   const navigate = useNavigate();
   const subscribeStatus = true
   const [header, setHeader] = useState("");
-  const [open, setOpen] = useState(false)
 
     const [userData, setUserData] = useState({
     name: "",
@@ -154,7 +153,7 @@ export const DetailProfile = (props) => {
       </Container>
       {currentUser?
           (
-            <UploadVideo open={open} setOpen={setOpen}/>
+            <UploadVideo/>
           ):""
       }
     </div>
