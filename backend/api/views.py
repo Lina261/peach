@@ -163,3 +163,21 @@ class VideoUpload(APIView):
             return Response(status=status.HTTP_201_CREATED)
         except Exception:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+class PhotoUpload(APIView):
+
+    def post(self, request):
+        try:
+            photo = request.FILES['photo']
+            fs = FileSystemStorage(location='media/photo/')
+            photo_name = fs.save(photo.name, photo)
+            uploaded_photo_url = fs.url(photo_name)
+            photo_url = f"photo/{uploaded_photo_url.split('/')[2]}"
+            print(photo_url)
+            profile = request.user.profile
+            profile.photo = photo_url
+            profile.save()
+            return Response(status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)

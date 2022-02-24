@@ -2,7 +2,7 @@ from api import views
 from rest_framework import routers
 from django.urls import path, include
 from api.views import RegisterAccount, HomePage, ProfileInfo, PeoplePage, ProfilePage, Subscribe, Unsubscribe, Follows, \
-    Followers, VideoView, ProfileDetail, FindAccount, VideoUpload
+    Followers, VideoView, ProfileDetail, FindAccount, VideoUpload, PhotoUpload
 
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     path('followers/', Followers.as_view()),
     path('video/', VideoView.as_view()),
     path('upload-video/', VideoUpload.as_view()),
+    path('upload-photo/', PhotoUpload.as_view()),
     path('find-account/', FindAccount.as_view()),
     path('profile/<int:id>/', ProfileDetail.as_view()),
 ]
