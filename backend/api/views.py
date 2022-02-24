@@ -1,4 +1,6 @@
 import json
+
+from django.core.files.storage import FileSystemStorage
 from rest_framework import viewsets
 from rest_framework import permissions, status
 from rest_framework.generics import ListAPIView
@@ -7,6 +9,7 @@ from rest_framework.views import APIView
 from .models import Profile, Video
 from api.serializers import AccountSerializer, ProfileSerializer, HeaderInfoSerializer, PageSerializer, \
     PeopleSerializer, FollowersSerializer, VideoSerializer
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser, FileUploadParser
 
 
 class RegisterAccount(APIView):
@@ -122,7 +125,8 @@ class VideoView(ListAPIView):
 
     def get_queryset(self):
         profile = self.request.user.profile
-        return Video.objects.exclude(owner=profile)
+        follows = profile.follows.all()
+        return Video.objects.exclude(owner=profile).filter(owner__in=follows)
 
 
 class ProfileDetail(APIView):
@@ -137,9 +141,25 @@ class FindAccount(APIView):
     def post(self, request):
         account = request.data.get('account')
         follows = request.user.profile.follows.all()
-        result = Profile.objects.exclude(account__username=request.user.profile).exclude(id__in=follows)\
+        result = Profile.objects.exclude(account__username=request.user.profile).exclude(id__in=follows) \
             .filter(account__username__contains=account)
         if result:
             serializer = PeopleSerializer(result, many=True)
             return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class VideoUpload(APIView):
+
+    def post(self, request):
+        try:
+            video = request.FILES['video']
+            title = request.data.get('title')
+            fs = FileSystemStorage(location='media/video/')
+            video_name = fs.save(video.name, video)
+            uploaded_video_url = fs.url(video_name)
+            video_url = f"video/{uploaded_video_url.split('/')[2]}"
+            Video.objects.create(videofile=video_url, title=title, owner=request.user.profile)
+            return Response(status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
