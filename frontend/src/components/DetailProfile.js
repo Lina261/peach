@@ -2,6 +2,7 @@ import Container from "@mui/material/Container";
 import { CardMedia, CssBaseline } from "@mui/material";
 import * as React from "react";
 import Header from "./Header";
+import UploadVideo from "./UploadVideo";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchWithAuth } from "../api/fetchWithAuth";
@@ -11,8 +12,7 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import { Player } from 'video-react';
 import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
+
 
 
 export const DetailProfile = (props) => {
@@ -21,7 +21,9 @@ export const DetailProfile = (props) => {
   const navigate = useNavigate();
   const subscribeStatus = true
   const [header, setHeader] = useState("");
-  const [userData, setUserData] = useState({
+  const [open, setOpen] = useState(false)
+
+    const [userData, setUserData] = useState({
     name: "",
     surname: "",
     caption: "",
@@ -31,6 +33,7 @@ export const DetailProfile = (props) => {
     followers: "",
     video: [],
   });
+
 
   useEffect(() => {
 
@@ -51,13 +54,11 @@ export const DetailProfile = (props) => {
     fetchWithAuth(baseUrl + "profile/" + (id ?? ''), { method: "GET", headers: {} })
       .then((response) => {
         if (response.ok) {
-        console.log('Request to profile')
           return response.json();
         }
       })
       .then((data) => {
         if (data) {
-          console.log("VIDEO",data.video);
           setUserData(data);
         }
       });
@@ -132,6 +133,7 @@ export const DetailProfile = (props) => {
           maxWidth="md"
         >
         {userData.video.length ? (
+
           userData.video.map((video) => (
             <div style={{backgroundColor: 'black'}}>
                 <video width="280" style={{marginBottom: 0}} controls>
@@ -151,9 +153,10 @@ export const DetailProfile = (props) => {
 
       </Container>
       {currentUser?
-       (<Fab  sx={{ position:"fixed", right: "40px", bottom: "40px"}} color="secondary" aria-label="add">
-            <AddIcon />
-          </Fab>):""}
+          (
+            <UploadVideo open={open} setOpen={setOpen}/>
+          ):""
+      }
     </div>
   );
 };
