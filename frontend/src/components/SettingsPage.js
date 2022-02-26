@@ -113,7 +113,6 @@ export const SettingsPage = () => {
             />
           ) : (
             <Avatar
-              src="/static/images/avatar/2.jpg"
               sx={{ width: 250, height: 250, margin: "20px"  }}
             />
           )}

@@ -48,6 +48,7 @@ export default function DialogComponent(props) {
               .then((response) => {
                 if (response.ok) {
                     alert.show("Video added successfully!")
+                    window.location.reload(false);
                 }
                 else{
                    alert.show("Error... Try later.",{

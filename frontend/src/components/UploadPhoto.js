@@ -1,20 +1,12 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import Input from '@mui/material/Input';
-import { CssBaseline, TextField } from "@mui/material";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { fetchWithAuth } from "../api/fetchWithAuth";
-import { baseUrl, mediaUrl } from "../constants";
+import { baseUrl } from "../constants";
 import { useAlert } from 'react-alert'
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 
@@ -22,10 +14,9 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 export default function UploadPhotoComponent(props) {
   const [fileStatus, setFileStatus] = useState('')
   const [selectedPhoto, setSelectedPhoto] = useState();
-  const [errorMessage, setErrorMessage] = useState('');
   const alert = useAlert();
 
-   useEffect(() => {
+  useEffect(() => {
     if (selectedPhoto){
         setFileStatus('✓ Photo added')
         }
@@ -45,6 +36,8 @@ export default function UploadPhotoComponent(props) {
               .then((response) => {
                 if (response.ok) {
                     alert.show("Photo added successfully!")
+                    window.location.reload(false);
+
                 }
                 else{
                    alert.show("Error... Try later.",{

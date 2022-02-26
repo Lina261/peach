@@ -2,20 +2,17 @@ import Container from "@mui/material/Container";
 import { CssBaseline } from "@mui/material";
 import * as React from "react";
 import Header from "./Header";
-import { useNavigate, useParams} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { fetchWithAuth } from "../api/fetchWithAuth";
-import { baseUrl, photoUrl } from "../constants";
+import { baseUrl } from "../constants";
 import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Button from "@mui/material/Button";
 import SearchBar from "./SearchBar";
 import {PeopleItem} from "./PeopleItem";
 import SentimentDissatisfiedSharpIcon from '@mui/icons-material/SentimentDissatisfiedSharp';
 
 
 export const PeopleList = (props) => {
-  const navigate = useNavigate();
   const [userData, setUserData] = useState("");
   const [data, setData] = useState([]);
   const apiPoint = props.apiPoint
@@ -23,7 +20,6 @@ export const PeopleList = (props) => {
 
 
   const findAccount=(account) => {
-    console.log("TO FIND", account)
     fetchWithAuth(baseUrl + "find-account/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -56,7 +52,6 @@ export const PeopleList = (props) => {
       })
       .then((data) => {
         if (data) {
-        console.log(data)
           setData(data);
         }
       });
