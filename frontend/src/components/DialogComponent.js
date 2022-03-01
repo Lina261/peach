@@ -48,7 +48,8 @@ export default function DialogComponent(props) {
               .then((response) => {
                 if (response.ok) {
                     alert.show("Video added successfully!")
-                    window.location.reload(false);
+                    setTimeout(() => window.location.reload(false), 2000);
+
                 }
                 else{
                    alert.show("Error... Try later.",{
@@ -63,7 +64,7 @@ export default function DialogComponent(props) {
             props.open(false)
         }
         else{
-            selectedVideo || setErrorMessage('Video title is required');
+            title || setErrorMessage('Video title is required');
             fileStatus || setFileStatus('You have not selected any file');
         }
 }
@@ -85,11 +86,11 @@ return(
           <Container sx={{height:"20px", maxHeight:"20px"}}>
                     <Typography sx = {{color: selectedVideo? "green" :"red", fontSize:"15px"}}> {fileStatus}</Typography>
           </Container>
-          <TextField
+        <TextField
         helperText={errorMessage}
         error={errorMessage}
         onChange={(e) => {setTitle(e.target.value);}}
-        label="Title" variant="standard" required sx = {{width:'200px', margin:'5px'}} > Add your video here</TextField>
+        label="Title" variant="standard" required sx = {{width:'200px', margin:'5px'}} ></TextField>
         <DialogActions sx = {{alignItems:"center", marginTop:"20px"}}>
       <Button variant="outlined"  onClick={() => {props.open(false)}}>Cancel</Button>
       <Button variant="outlined"  onClick={saveVideo}>Save</Button>
