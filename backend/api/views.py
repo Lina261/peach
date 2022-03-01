@@ -1,7 +1,4 @@
-import json
-
 from django.core.files.storage import FileSystemStorage
-from rest_framework import viewsets
 from rest_framework import permissions, status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
@@ -9,7 +6,7 @@ from rest_framework.views import APIView
 from .models import Profile, Video
 from api.serializers import AccountSerializer, ProfileSerializer, HeaderInfoSerializer, PageSerializer, \
     PeopleSerializer, FollowersSerializer, VideoSerializer
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser, FileUploadParser
+from rest_framework.pagination import LimitOffsetPagination
 
 
 class RegisterAccount(APIView):
@@ -121,6 +118,7 @@ class Followers(APIView):
 
 
 class VideoView(ListAPIView):
+    pagination_class = LimitOffsetPagination
     serializer_class = VideoSerializer
 
     def get_queryset(self):
@@ -174,7 +172,6 @@ class PhotoUpload(APIView):
             photo_name = fs.save(photo.name, photo)
             uploaded_photo_url = fs.url(photo_name)
             photo_url = f"photo/{uploaded_photo_url.split('/')[2]}"
-            print(photo_url)
             profile = request.user.profile
             profile.photo = photo_url
             profile.save()
