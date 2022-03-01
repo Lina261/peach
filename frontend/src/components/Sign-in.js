@@ -45,12 +45,10 @@ export default function SignIn() {
           alignItems: "center",
         }}
       >
-        {/*<Avatar sx={{ m: 10, bgcolor: "secondary.main" }}>*/}
         <img
           src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/60/000000/external-peach-fruit-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png"
           alt="peach"
         />
-        {/*</Avatar>*/}
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
@@ -97,11 +95,7 @@ export default function SignIn() {
             Sign In
           </Button>
           <Grid container>
-            <Grid item xs>
-              {/*<Link href="#" variant="body2">*/}
-              {/*  Forgot password?*/}
-              {/*</Link>*/}
-            </Grid>
+            <Grid item xs></Grid>
             <Grid item>
               <Link href="/sign-up" variant="body2">
                 Sign up

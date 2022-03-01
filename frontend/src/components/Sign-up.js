@@ -16,7 +16,6 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [apiError, setApiError] = useState("");
   const [errorMessage, setErrorMessage] = useState({
     email: "",
     password: "",
@@ -25,16 +24,6 @@ export default function SignUp() {
 
   const justifyApiError = (message) => {
     return message.charAt(0).toUpperCase() + message.slice(1);
-  };
-
-  const setErrorsFromBackend = (errors, field) => {
-    // eslint-disable-next-line no-unused-expressions
-    errors.field
-      ? setErrorMessage((errorMessage) => ({
-          ...errorMessage,
-          field: justifyApiError(errors.field[0]),
-        }))
-      : "";
   };
 
   const checkEmail = () => {

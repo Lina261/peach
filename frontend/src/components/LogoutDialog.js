@@ -6,7 +6,6 @@ import {
 } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useTheme } from "@mui/styles";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function LogoutDialog(props) {

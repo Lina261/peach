@@ -1,28 +1,22 @@
 import Container from "@mui/material/Container";
-import { CardMedia, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import * as React from "react";
 import Header from "./Header";
 import UploadVideo from "./UploadVideo";
 import Avatar from "@mui/material/Avatar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { baseUrl, mediaUrl } from "../constants";
 import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
-import { Player } from 'video-react';
-import Box from '@mui/material/Box';
-
-
 
 export const DetailProfile = (props) => {
-  const currentUser = props.currentUser
-  const {id} = useParams()
-  const navigate = useNavigate();
-  const subscribeStatus = true
+  const currentUser = props.currentUser;
+  const { id } = useParams();
   const [header, setHeader] = useState("");
 
-    const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState({
     name: "",
     surname: "",
     caption: "",
@@ -33,24 +27,24 @@ export const DetailProfile = (props) => {
     video: [],
   });
 
-
   useEffect(() => {
+    fetchWithAuth(baseUrl + "home/", { method: "GET", headers: {} })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        if (data) {
+          console.log(data);
+          setHeader(data);
+        }
+      });
 
-      fetchWithAuth(baseUrl + "home/", { method: "GET", headers: {} })
-          .then((response) => {
-            if (response.ok) {
-              return response.json();
-            }
-          })
-          .then((data) => {
-            if (data) {
-            console.log(data)
-              setHeader(data);
-            }
-          });
-
-
-    fetchWithAuth(baseUrl + "profile/" + (id ?? ''), { method: "GET", headers: {} })
+    fetchWithAuth(baseUrl + "profile/" + (id ?? ""), {
+      method: "GET",
+      headers: {},
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -66,9 +60,7 @@ export const DetailProfile = (props) => {
   return (
     <div>
       <CssBaseline />
-      <Header
-        user={header}
-      />
+      <Header user={header} />
       <Container
         sx={{
           alignItems: "center",
@@ -89,8 +81,13 @@ export const DetailProfile = (props) => {
             sx={{ width: 250, height: 250, margin: "20px" }}
           />
         )}
-        {!currentUser?
-       (<Typography variant='overline'>{userData.account.username}</Typography>):""}
+        {!currentUser ? (
+          <Typography variant="overline">
+            {userData.account.username}
+          </Typography>
+        ) : (
+          ""
+        )}
         <Typography>
           {userData.name} {userData.surname}
         </Typography>
@@ -109,8 +106,7 @@ export const DetailProfile = (props) => {
             gridTemplateColumns: "100px 100px",
           }}
         >
-          <Link href="/followers"
-             underline="none">
+          <Link href="/followers" underline="none">
             Followers
           </Link>
           <Link href="/follows" underline="none">
@@ -131,31 +127,42 @@ export const DetailProfile = (props) => {
           }}
           maxWidth="md"
         >
-        {userData.video.length ? (
-
-          userData.video.map((video) => (
-            <div style={{backgroundColor: 'black'}}>
-                <video width="280" style={{marginBottom: 0}} controls>
+          {userData.video.length ? (
+            userData.video.map((video) => (
+              <div style={{ backgroundColor: "black" }}>
+                <video width="280" style={{ marginBottom: 0 }} controls>
                   <source src={mediaUrl + video.videofile} type="video/mp4" />
                 </video>
-                <div style={{backgroundColor: 'black', marginLeft: "10px"}}>
-                    <Typography sx={{color:"white", fontWeight:"bold", fontStyle: "italic", paddingBottom: "5px"}}>{video.title}</Typography>
+                <div style={{ backgroundColor: "black", marginLeft: "10px" }}>
+                  <Typography
+                    sx={{
+                      color: "white",
+                      fontWeight: "bold",
+                      fontStyle: "italic",
+                      paddingBottom: "5px",
+                    }}
+                  >
+                    {video.title}
+                  </Typography>
                 </div>
-            </div>
-          ))) :
-          <Container sx={{gridColumnStart: "2", textAlign:"center", marginTop:"30px"}}>
-            <Typography variant="overline" sx={{ fontSize:"15px"}}>No video yet </Typography>
-          </Container>
-          }
-
+              </div>
+            ))
+          ) : (
+            <Container
+              sx={{
+                gridColumnStart: "2",
+                textAlign: "center",
+                marginTop: "30px",
+              }}
+            >
+              <Typography variant="overline" sx={{ fontSize: "15px" }}>
+                No video yet{" "}
+              </Typography>
+            </Container>
+          )}
         </Container>
-
       </Container>
-      {currentUser?
-          (
-            <UploadVideo/>
-          ):""
-      }
+      {currentUser ? <UploadVideo /> : ""}
     </div>
   );
 };

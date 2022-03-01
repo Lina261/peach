@@ -1,26 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchWithAuth } from "../api/fetchWithAuth";
 import { baseUrl } from "../constants";
 import { CssBaseline, TextField } from "@mui/material";
 import Header from "./Header";
 import UploadPhoto from "./UploadPhoto";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import * as React from "react";
 import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { useAlert } from 'react-alert'
-import DialogComponent from "./DialogComponent";
-import Dialog from '@mui/material/Dialog';
-import Slide from '@mui/material/Slide';
+import { useAlert } from "react-alert";
+import Dialog from "@mui/material/Dialog";
+import Slide from "@mui/material/Slide";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
 
 export const SettingsPage = () => {
   const navigate = useNavigate();
@@ -35,7 +30,6 @@ export const SettingsPage = () => {
     setOpen(true);
   };
 
-
   const updateProfile = (e) => {
     e.preventDefault();
     fetchWithAuth(baseUrl + "user-info/", {
@@ -45,16 +39,15 @@ export const SettingsPage = () => {
     })
       .then((response) => {
         if (response.ok) {
-          alert.show("Profile updated!!!")
+          alert.show("Profile updated!!!");
+          setTimeout(() => navigate("/profile", { replace: true }), 500);
+        } else {
+          alert.show("Something went wrong...", {
+            timeout: 2000,
+            type: "error",
+          });
           setTimeout(() => navigate("/profile", { replace: true }), 500);
         }
-        else{
-        alert.show("Something went wrong...",{
-            timeout: 2000,
-            type: 'error'}
-        )
-        setTimeout(() => navigate("/profile", { replace: true }), 500);}
-
       })
       .then((data) => {
         console.log(data);
@@ -70,7 +63,6 @@ export const SettingsPage = () => {
     follows: "",
     followers: "",
   });
-
 
   useEffect(() => {
     fetchWithAuth(baseUrl + "user-info/", { method: "GET", headers: {} })
@@ -112,9 +104,7 @@ export const SettingsPage = () => {
               sx={{ width: 250, height: 250, margin: "20px" }}
             />
           ) : (
-            <Avatar
-              sx={{ width: 250, height: 250, margin: "20px"  }}
-            />
+            <Avatar sx={{ width: 250, height: 250, margin: "20px" }} />
           )}
           <Button variant="text" component="label" onClick={handleClickOpen}>
             Change photo
@@ -189,13 +179,20 @@ export const SettingsPage = () => {
           Save
         </Button>
         <Dialog
-            PaperProps={{ sx: { width: "20%",  height: "230px" , maxHeight:"230px", textAlign: "center"} }}
-            open={open}
-            TransitionComponent={Transition}
-            onClose={handleClose}
+          PaperProps={{
+            sx: {
+              width: "20%",
+              height: "230px",
+              maxHeight: "230px",
+              textAlign: "center",
+            },
+          }}
+          open={open}
+          TransitionComponent={Transition}
+          onClose={handleClose}
         >
-          <UploadPhoto open={setOpen}  />
-       </Dialog>
+          <UploadPhoto open={setOpen} />
+        </Dialog>
       </Container>
     </div>
   );
