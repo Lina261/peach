@@ -5,7 +5,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { CssBaseline } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import { baseUrl } from "../constants";
+import { baseUrl, mediaUrl } from "../constants";
 import { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
@@ -27,6 +27,7 @@ export const HomePage = () => {
       })
       .then((data) => {
         if (data) {
+          console.log(data);
           setVideoList([...videoList, ...data.results]);
           setNext(data.next);
           setPrevious(data.previous);
@@ -99,17 +100,20 @@ export const HomePage = () => {
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
+                  marginLeft: "10%",
                 }}
               >
-                <Avatar
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    margin: "10px",
-                    marginLeft: "10%",
-                  }}
-                />
-                <Typography variant="subtitle2">Ivan </Typography>
+                {videoList[step].photo.photo ? (
+                  <Avatar
+                    src={mediaUrl + videoList[step].photo.photo}
+                    sx={{ width: 40, height: 40, margin: "10px" }}
+                  />
+                ) : (
+                  <Avatar sx={{ width: 40, height: 40, margin: "10px" }} />
+                )}
+                <Typography variant="subtitle2">
+                  {videoList[step].owner}{" "}
+                </Typography>
               </Container>
 
               <video
@@ -126,6 +130,7 @@ export const HomePage = () => {
                     fontWeight: "bold",
                     fontStyle: "italic",
                     paddingBottom: "5px",
+                    marginRight: "600px",
                   }}
                 >
                   {videoList[step]?.title}
