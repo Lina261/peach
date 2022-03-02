@@ -61,10 +61,26 @@ class HeaderInfoSerializer(serializers.Serializer):
     user = serializers.CharField()
 
 
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['photo']
+
+
 class VideoSerializer(serializers.ModelSerializer):
+    owner = serializers.SerializerMethodField('get_owner')
+    photo = serializers.SerializerMethodField('get_photo')
+
+    def get_owner(self, video):
+        return video.owner.account.username
+
+    def get_photo(self, video):
+        serializer = PhotoSerializer(video.owner)
+        return serializer.data
+
     class Meta:
         model = Video
-        fields = ('__all__')
+        fields = ['id', 'owner', 'title', 'videofile', 'photo']
 
 
 class PageSerializer(serializers.ModelSerializer):

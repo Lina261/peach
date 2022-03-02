@@ -1,6 +1,4 @@
-from api import views
-from rest_framework import routers
-from django.urls import path, include
+from django.urls import path
 from api.views import RegisterAccount, HomePage, ProfileInfo, PeoplePage, ProfilePage, Subscribe, Unsubscribe, Follows, \
     Followers, VideoView, ProfileDetail, FindAccount, VideoUpload, PhotoUpload
 

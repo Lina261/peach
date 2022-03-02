@@ -5,7 +5,6 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from django.views.static import serve
 from django.conf import settings
 
 urlpatterns = [
