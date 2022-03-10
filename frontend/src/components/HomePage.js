@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import { CssBaseline } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import { baseUrl, mediaUrl } from "../constants";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
@@ -51,15 +51,38 @@ export const HomePage = () => {
   }, []);
 
   const nextVideo = async () => {
-    if (step === videoList.length - 1 && next) {
+    if (step === videoList.length - 2 && next) {
       await getVideo(next);
     }
-    setStep(step + 1);
+    setStep((step) => step + 1);
   };
 
   const previousVideo = () => {
-    setStep(step - 1);
+    setStep((step) => step - 1);
   };
+
+  const arrowClick = (event) => {
+    if (event.code === "ArrowLeft" && step !== 0) {
+      previousVideo();
+    }
+    if (
+      event.code === "ArrowRight" &&
+      !(step === videoList.length - 1 && !next)
+    ) {
+      nextVideo();
+    }
+  };
+
+  const handlerRef = useRef(null);
+
+  useEffect(() => {
+    document.body.removeEventListener("keydown", handlerRef.current);
+    document.body.addEventListener("keydown", arrowClick);
+    handlerRef.current = arrowClick;
+    return () => {
+      document.body.removeEventListener("keydown", arrowClick);
+    };
+  }, [step, next]);
 
   return (
     <div>
@@ -118,6 +141,7 @@ export const HomePage = () => {
 
               <video
                 width="80%"
+                height="80%"
                 style={{ display: "block" }}
                 controls
                 src={videoList[step]?.videofile}
