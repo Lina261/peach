@@ -1,7 +1,6 @@
 from django.urls import path
 from api.views import RegisterAccount, HomePage, ProfileInfo, PeoplePage, ProfilePage, Subscribe, Unsubscribe, Follows, \
-    Followers, VideoView, ProfileDetail, FindAccount, VideoUpload, PhotoUpload
-
+    Followers, VideoView, ProfileDetail, FindAccount, VideoUpload, PhotoUpload, UserFollows, UserFollowers
 
 urlpatterns = [
     path('register/', RegisterAccount.as_view()),
@@ -13,6 +12,8 @@ urlpatterns = [
     path('unsubscribe/', Unsubscribe.as_view()),
     path('follows/', Follows.as_view()),
     path('followers/', Followers.as_view()),
+    path('<int:id>/follows/', UserFollows.as_view()),
+    path('<int:id>/followers/', UserFollowers.as_view()),
     path('video/', VideoView.as_view()),
     path('upload-video/', VideoUpload.as_view()),
     path('upload-photo/', PhotoUpload.as_view()),

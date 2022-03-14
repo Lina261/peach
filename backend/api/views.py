@@ -4,8 +4,8 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Profile, Video
-from api.serializers import AccountSerializer, ProfileSerializer, HeaderInfoSerializer, PageSerializer, \
-    PeopleSerializer, FollowersSerializer, VideoSerializer
+from api.serializers import AccountSerializer, ProfileSettingsSerializer, HeaderInfoSerializer, PageSerializer, \
+    VideoSerializer, ProfileSerializer
 from rest_framework.pagination import LimitOffsetPagination
 
 
@@ -40,12 +40,12 @@ class ProfileInfo(APIView):
 
     def get(self, request):
         profile = request.user.profile
-        serializer = ProfileSerializer(profile)
+        serializer = ProfileSettingsSerializer(profile)
         return Response(serializer.data)
 
     def post(self, request):
         profile_to_update = request.user.profile
-        serializer = ProfileSerializer(profile_to_update, request.data.get('userData'))
+        serializer = ProfileSettingsSerializer(profile_to_update, request.data.get('userData'))
         if serializer.is_valid():
             saved = serializer.save()
             if saved:
@@ -68,7 +68,7 @@ class PeoplePage(APIView):
         profile = request.user.profile
         follows = profile.follows.all()
         people = Profile.objects.exclude(account__username=profile.account.username).exclude(id__in=follows)
-        serializer = PeopleSerializer(people, many=True)
+        serializer = ProfileSerializer(people, context={'follows': follows}, many=True)
         return Response(serializer.data)
 
 
@@ -103,17 +103,19 @@ class Unsubscribe(APIView):
 class Follows(APIView):
 
     def get(self, request):
-        people = request.user.profile.follows
-        serializer = PeopleSerializer(people, many=True)
+        people = request.user.profile.follows.all()
+        user = request.user.profile
+        serializer = ProfileSerializer(people, context={'follows': people, 'user':user}, many=True)
         return Response(serializer.data)
 
 
 class Followers(APIView):
 
     def get(self, request):
-        people = request.user.profile.followers
+        people = request.user.profile.followers.all()
         follows = request.user.profile.follows.all()
-        serializer = FollowersSerializer(people, context={'follows': follows}, many=True)
+        user = request.user.profile
+        serializer = ProfileSerializer(people, context={'follows': follows, 'user': user}, many=True)
         return Response(serializer.data)
 
 
@@ -134,6 +136,26 @@ class ProfileDetail(APIView):
         return Response(serializer.data)
 
 
+class UserFollows(APIView):
+
+    def get(self, request, id):
+        people = Profile.objects.get(account__id=id).follows
+        follows = request.user.profile.follows.all()
+        user = request.user.profile
+        serializer = ProfileSerializer(people, context={'follows': follows, 'user': user}, many=True)
+        return Response(serializer.data)
+
+
+class UserFollowers(APIView):
+
+    def get(self, request, id):
+        people = Profile.objects.get(account__id=id).followers
+        follows = request.user.profile.follows.all()
+        user = request.user.profile
+        serializer = ProfileSerializer(people, context={'follows': follows, 'user': user}, many=True)
+        return Response(serializer.data)
+
+
 class FindAccount(APIView):
 
     def post(self, request):
@@ -142,7 +164,8 @@ class FindAccount(APIView):
         result = Profile.objects.exclude(account__username=request.user.profile).exclude(id__in=follows) \
             .filter(account__username__contains=account)
         if result:
-            serializer = PeopleSerializer(result, many=True)
+            user = request.user.profile
+            serializer = ProfileSerializer(result, context={'follows': follows, 'user':user}, many=True)
             return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
 

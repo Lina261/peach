@@ -36,7 +36,7 @@ class AccountInfoSerializer(serializers.ModelSerializer):
         return instance
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class ProfileSettingsSerializer(serializers.ModelSerializer):
     account = AccountInfoSerializer()
 
     class Meta:
@@ -101,21 +101,16 @@ class PageSerializer(serializers.ModelSerializer):
         extra_kwargs = {'photo': {'read_only': True}}
 
 
-class FollowersSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     account = AccountSerializer()
     subscribe_status = serializers.SerializerMethodField('get_status')
 
     def get_status(self, profile):
+        user = self.context.get('user')
+        if user == profile:
+            return 'OWNER'
         return profile in self.context.get('follows')
 
     class Meta:
         model = Profile
         fields = ('account', 'caption', 'photo', 'subscribe_status')
-
-
-class PeopleSerializer(serializers.ModelSerializer):
-    account = AccountSerializer()
-
-    class Meta:
-        model = Profile
-        fields = ('account', 'caption', 'photo')
