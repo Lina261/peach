@@ -9,6 +9,8 @@ import { PeoplePage } from "./components/PeoplePage";
 import { Follows } from "./components/Follows";
 import { Followers } from "./components/Followers";
 import { DetailProfile } from "./components/DetailProfile";
+import { UserFollows } from "./components/UserFollows";
+import { UserFollowers } from "./components/UserFollowers";
 
 function App() {
   return (
@@ -28,10 +30,13 @@ function App() {
 
         <Route path={"/people"} element={<PeoplePage />} />
 
-        <Route path={"/follows"} element={<Follows />} />
+        <Route path={"profile/follows"} element={<Follows />} />
 
-        <Route path={"/followers"} element={<Followers />} />
+        <Route path={"profile/followers"} element={<Followers />} />
 
+        <Route path={"profile/:id/follows"} element={<UserFollows />} />
+
+        <Route path={"profile/:id/followers"} element={<UserFollowers />} />
       </Routes>
     </div>
   );

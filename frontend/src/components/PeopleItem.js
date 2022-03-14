@@ -71,7 +71,7 @@ export const PeopleItem = (props) => {
         }}
       >
         <Link
-          href={`profile/${user.account.id}`}
+          href={`/profile/${user.account.id}`}
           variant="h5"
           underline="none"
           sx={{}}
@@ -94,13 +94,17 @@ export const PeopleItem = (props) => {
           alignItems: "center",
         }}
       >
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: subscribed ? "black" : undefined }}
-          onClick={() => onSubscribe(user.account.username)}
-        >
-          {subscribed ? "Unsubscribe" : "Subscribe"}
-        </Button>
+        {subscribed === "OWNER" ? (
+          ""
+        ) : (
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: subscribed ? "black" : undefined }}
+            onClick={() => onSubscribe(user.account.username)}
+          >
+            {subscribed ? "Unsubscribe" : "Subscribe"}
+          </Button>
+        )}
       </Container>
     </Container>
   );

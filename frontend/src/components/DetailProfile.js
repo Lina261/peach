@@ -106,10 +106,16 @@ export const DetailProfile = (props) => {
             gridTemplateColumns: "100px 100px",
           }}
         >
-          <Link href="/followers" underline="none">
+          <Link
+            href={id ? `/profile/${id}/followers` : "/profile/followers"}
+            underline="none"
+          >
             Followers
           </Link>
-          <Link href="/follows" underline="none">
+          <Link
+            href={id ? `/profile/${id}/follows` : "/profile/follows"}
+            underline="none"
+          >
             Follows
           </Link>
           <Typography>{userData.followers}</Typography>
