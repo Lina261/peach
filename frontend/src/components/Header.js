@@ -18,12 +18,19 @@ import { InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LogoutDialog from "./LogoutDialog";
 import { baseUrl, mediaUrl } from "../constants";
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import AccessibilityNewTwoToneIcon from '@mui/icons-material/AccessibilityNewTwoTone';
-import PersonSearchTwoToneIcon from '@mui/icons-material/PersonSearchTwoTone';
+import PersonIcon from "@mui/icons-material/Person";
+import HomeIcon from "@mui/icons-material/Home";
+import PeopleIcon from "@mui/icons-material/People";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
-const icons = [<HomeTwoToneIcon />, <AccessibilityNewTwoToneIcon/>, <PersonSearchTwoToneIcon/>  ]
-const pages = ["Home", "Profile", "People"];
+const icons = [
+  <HomeIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
+  <PersonIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
+  <PeopleIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
+  <FavoriteIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
+];
+
+const pages = ["Home", "Profile", "People", "Likes"];
 const settings = ["Settings", "Logout"];
 
 const Header = (props) => {
@@ -151,17 +158,24 @@ const Header = (props) => {
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-
-            {pages.map((page) => (
-
-
+            {pages.map((page, i) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 0, color: "white", display: "block" }}
               >
-                {page}
-
+                <Container
+                  sx={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    color: "primary",
+                  }}
+                >
+                  {icons[i]}
+                  <Typography sx={{ display: "none" }}>{page}</Typography>
+                </Container>
               </Button>
             ))}
           </Box>
@@ -176,10 +190,8 @@ const Header = (props) => {
           </Search>
 
           <Box sx={{ flexGrow: 0 }}>
-
             <Typography textAlign="center" sx={{ mr: 2, display: "inline" }}>
               {props.user?.user}
-
             </Typography>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
