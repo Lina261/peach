@@ -19,6 +19,8 @@ export default function LogoutDialog(props) {
   };
   const exit = () => {
     navigate("/", { replace: true });
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
   };
 
   return (

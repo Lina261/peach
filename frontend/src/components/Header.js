@@ -11,7 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import { InputBase } from "@mui/material";
@@ -23,13 +23,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-const icons = [
-  <HomeIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
-  <PersonIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
-  <PeopleIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
-  <FavoriteIcon sx={{ color: "#D75878", fontSize: "30px" }} />,
-];
-
 const pages = ["Home", "Profile", "People", "Likes"];
 const settings = ["Settings", "Logout"];
 
@@ -38,6 +31,30 @@ const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setopen] = useState(false);
+  const [currentPage, setCurrentPage] = useState("Home");
+
+  const icons = [
+    <HomeIcon
+      htmlColor={window.location.href.includes("home") ? "#FEFCFC" : "#D75878"}
+      sx={{ fontSize: "30px" }}
+    />,
+    <PersonIcon
+      htmlColor={
+        window.location.href.includes("profile") ? "#FEFCFC" : "#D75878"
+      }
+      sx={{ fontSize: "30px" }}
+    />,
+    <PeopleIcon
+      htmlColor={
+        window.location.href.includes("people") ? "#FEFCFC" : "#D75878"
+      }
+      sx={{ fontSize: "30px" }}
+    />,
+    <FavoriteIcon
+      htmlColor={window.location.href.includes("likes") ? "#FEFCFC" : "#D75878"}
+      sx={{ fontSize: "30px" }}
+    />,
+  ];
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -48,12 +65,12 @@ const Header = (props) => {
 
   const handleCloseNavMenu = (e) => {
     let linkToNavigate = e.currentTarget.textContent;
-    console.log(linkToNavigate);
-    if (linkToNavigate == "Logout") {
+    if (linkToNavigate === "Logout") {
       setopen(true);
     } else {
       navigate("/" + linkToNavigate.toLowerCase());
       setAnchorElNav(null);
+      setCurrentPage(linkToNavigate);
     }
   };
 
@@ -106,7 +123,7 @@ const Header = (props) => {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar sx={{ mb: "5px" }} disableGutters>
           <img
             src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/60/000000/external-peach-fruit-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png"
             alt="peach"
@@ -120,7 +137,12 @@ const Header = (props) => {
             PEACH
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none" },
+            }}
+          >
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -138,13 +160,12 @@ const Header = (props) => {
                 vertical: "bottom",
                 horizontal: "left",
               }}
-              keepMounted
+              // keepMounted
               transformOrigin={{
                 vertical: "top",
                 horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
               sx={{
                 display: { xs: "block", md: "none" },
               }}
@@ -156,13 +177,12 @@ const Header = (props) => {
               ))}
             </Menu>
           </Box>
-
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page, i) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 0, color: "white", display: "block" }}
+                sx={{ display: "block" }}
               >
                 <Container
                   sx={{
@@ -170,10 +190,10 @@ const Header = (props) => {
                     justifyContent: "center",
                     display: "flex",
                     flexDirection: "column",
-                    color: "primary",
                   }}
                 >
                   {icons[i]}
+
                   <Typography sx={{ display: "none" }}>{page}</Typography>
                 </Container>
               </Button>
