@@ -80,7 +80,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Video
-        fields = ['id', 'owner', 'title', 'videofile', 'photo']
+        fields = ['id', 'owner', 'title', 'videofile', 'photo', 'liked']
 
 
 class PageSerializer(serializers.ModelSerializer):

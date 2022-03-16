@@ -15,8 +15,6 @@ export const PeopleItem = (props) => {
     props.subscribeStatus ? props.subscribeStatus : user.subscribe_status
   );
   const onSubscribe = (user) => {
-    console.log(user);
-    console.log(user.subscribe_status);
     if (!subscribed) {
       fetchWithAuth(baseUrl + "subscribe/", {
         method: "POST",

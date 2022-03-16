@@ -201,3 +201,17 @@ class PhotoUpload(APIView):
             return Response(status=status.HTTP_201_CREATED)
         except Exception:
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+
+
+class Like(APIView):
+
+    def post(self, request):
+        like_status = request.data.get('like_status')
+        video_id = request.data.get('id')
+        video = Video.objects.get(id=video_id)
+        try:
+            video.liked = like_status
+            video.save()
+        except Exception:
+            return Response(status.HTTP_400_BAD_REQUEST)
+        return Response(status.HTTP_200_OK)

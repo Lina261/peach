@@ -45,6 +45,7 @@ class Video(models.Model):
     owner = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='video')
     title = models.CharField(max_length=255)
     videofile = models.FileField(upload_to='video/')  # temporary solution
+    liked = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -61,3 +62,4 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.account.username
+

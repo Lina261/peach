@@ -4,12 +4,12 @@ import * as React from "react";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { CssBaseline } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
 import { baseUrl, mediaUrl } from "../constants";
 import { useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
+import { VideoItem } from "./VideoItem";
 
 export const HomePage = () => {
   const [userData, setUserData] = useState({ user: "", photo: "" });
@@ -29,6 +29,7 @@ export const HomePage = () => {
         if (data) {
           console.log(data);
           setVideoList([...videoList, ...data.results]);
+
           setNext(data.next);
           setPrevious(data.previous);
         }
@@ -44,6 +45,7 @@ export const HomePage = () => {
       })
       .then((data) => {
         if (data) {
+          console.log(data);
           setUserData(data);
         }
       });
@@ -108,59 +110,8 @@ export const HomePage = () => {
               <ArrowBackIosOutlinedIcon />
             </Button>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minWidth: "100%",
-                backgroundColor: "black",
-              }}
-            >
-              <Container
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginLeft: "10%",
-                }}
-              >
-                {videoList[step].photo.photo ? (
-                  <Avatar
-                    src={mediaUrl + videoList[step].photo.photo}
-                    sx={{ width: 40, height: 40, margin: "10px" }}
-                  />
-                ) : (
-                  <Avatar sx={{ width: 40, height: 40, margin: "10px" }} />
-                )}
-                <Typography variant="subtitle2">
-                  {videoList[step].owner}{" "}
-                </Typography>
-              </Container>
+            <VideoItem video={videoList[step]} setList={setVideoList} />
 
-              <video
-                width="80%"
-                height="80%"
-                style={{ display: "block" }}
-                controls
-                src={videoList[step]?.videofile}
-              />
-
-              <div style={{ backgroundColor: "black", marginLeft: "10px" }}>
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                    paddingBottom: "5px",
-                    marginRight: "600px",
-                  }}
-                >
-                  {videoList[step]?.title}
-                </Typography>
-              </div>
-            </div>
             <Button
               sx={{
                 visibility:
