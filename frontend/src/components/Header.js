@@ -11,13 +11,13 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, alpha } from "@mui/material/styles";
 import { InputBase } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import LogoutDialog from "./LogoutDialog";
-import { baseUrl, mediaUrl } from "../constants";
+import { mediaUrl } from "../constants";
 import PersonIcon from "@mui/icons-material/Person";
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
@@ -31,7 +31,6 @@ const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [open, setopen] = useState(false);
-  const [currentPage, setCurrentPage] = useState("Home");
 
   const icons = [
     <HomeIcon
@@ -70,7 +69,6 @@ const Header = (props) => {
     } else {
       navigate("/" + linkToNavigate.toLowerCase());
       setAnchorElNav(null);
-      setCurrentPage(linkToNavigate);
     }
   };
 

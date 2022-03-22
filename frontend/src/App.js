@@ -4,13 +4,13 @@ import { SettingsPage } from "./components/SettingsPage";
 import { ProfilePage } from "./components/ProfilePage";
 import SignIn from "./components/Sign-in";
 import SignUp from "./components/Sign-up";
-import LogoutDialog from "./components/LogoutDialog";
 import { PeoplePage } from "./components/PeoplePage";
 import { Follows } from "./components/Follows";
 import { Followers } from "./components/Followers";
 import { DetailProfile } from "./components/DetailProfile";
 import { UserFollows } from "./components/UserFollows";
 import { UserFollowers } from "./components/UserFollowers";
+import { Favorites } from "./components/Favorites";
 
 function App() {
   return (
@@ -25,6 +25,8 @@ function App() {
         <Route path={"/settings"} element={<SettingsPage />} />
 
         <Route path={"/profile"} element={<ProfilePage />} />
+
+        <Route path={"/likes"} element={<Favorites />} />
 
         <Route path={"/profile/:id"} element={<DetailProfile />} />
 

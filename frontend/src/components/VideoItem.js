@@ -7,14 +7,9 @@ import Typography from "@mui/material/Typography";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import { baseUrl, mediaUrl } from "../constants";
-import { useEffect, useState } from "react";
 
 export const VideoItem = (props) => {
   const video = props.video;
-
-  useEffect(() => {
-    console.log(props.status);
-  });
 
   const changeLikeStatus = () => {
     fetchWithAuth(baseUrl + "set-like/", {
@@ -71,6 +66,7 @@ export const VideoItem = (props) => {
         height="80%"
         style={{ display: "block" }}
         controls
+        autoPlay="true"
         src={video?.videofile}
       />
 
