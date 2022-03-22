@@ -3,9 +3,9 @@ from rest_framework import permissions, status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Profile, Video
+from .models import Profile, Video, Like
 from api.serializers import AccountSerializer, ProfileSettingsSerializer, HeaderInfoSerializer, PageSerializer, \
-    VideoSerializer, ProfileSerializer
+    VideoSerializer, ProfileSerializer, CurrentUserVideoSerializer
 from rest_framework.pagination import LimitOffsetPagination
 
 
@@ -105,7 +105,7 @@ class Follows(APIView):
     def get(self, request):
         people = request.user.profile.follows.all()
         user = request.user.profile
-        serializer = ProfileSerializer(people, context={'follows': people, 'user':user}, many=True)
+        serializer = ProfileSerializer(people, context={'follows': people, 'user': user}, many=True)
         return Response(serializer.data)
 
 
@@ -132,7 +132,7 @@ class VideoView(ListAPIView):
 class ProfileDetail(APIView):
     def get(self, request, id):
         profile = Profile.objects.get(account__id=id)
-        serializer = PageSerializer(profile)
+        serializer = PageSerializer(profile, context={'profile': request.user.profile})
         return Response(serializer.data)
 
 
@@ -165,7 +165,7 @@ class FindAccount(APIView):
             .filter(account__username__contains=account)
         if result:
             user = request.user.profile
-            serializer = ProfileSerializer(result, context={'follows': follows, 'user':user}, many=True)
+            serializer = ProfileSerializer(result, context={'follows': follows, 'user': user}, many=True)
             return Response(serializer.data)
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -203,15 +203,25 @@ class PhotoUpload(APIView):
             return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
 
 
-class Like(APIView):
+class LikeView(APIView):
 
     def post(self, request):
         like_status = request.data.get('like_status')
         video_id = request.data.get('id')
         video = Video.objects.get(id=video_id)
         try:
-            video.liked = like_status
-            video.save()
+            Like.objects.create(video=video, liker=request.user.profile, like=like_status)
         except Exception:
+
             return Response(status.HTTP_400_BAD_REQUEST)
         return Response(status.HTTP_200_OK)
+
+
+class Favorites(APIView):
+
+    def get(self, request):
+        profile = request.user.profile
+        likes = Like.objects.filter(liker=profile).filter(like=True)
+        video_set = [like.video for like in likes]
+        serializer = CurrentUserVideoSerializer(video_set, many=True)
+        return Response(serializer.data)

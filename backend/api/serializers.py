@@ -1,6 +1,6 @@
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from rest_framework import serializers
-from .models import Account, Profile, Video
+from .models import Account, Profile, Video, Like
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -67,9 +67,27 @@ class PhotoSerializer(serializers.ModelSerializer):
         fields = ['photo']
 
 
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = '__all__'
+
+
+class CurrentUserVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ['id', 'owner', 'title', 'videofile']
+
+
 class VideoSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField('get_owner')
     photo = serializers.SerializerMethodField('get_photo')
+    liked = serializers.SerializerMethodField('get_status')
+
+    def get_status(self, video):
+        self_user = self.context['request'].user.profile
+        like = Like.objects.filter(video=video).filter(liker=self_user)
+        return like[0].like if like else False
 
     def get_owner(self, video):
         return video.owner.account.username
@@ -87,7 +105,7 @@ class PageSerializer(serializers.ModelSerializer):
     account = AccountInfoSerializer()
     followers = serializers.SerializerMethodField('get_followers')
     follows = serializers.SerializerMethodField('get_follows')
-    video = VideoSerializer(many=True)
+    video = CurrentUserVideoSerializer(many=True)
 
     def get_followers(self, profile):
         return profile.followers.count()
