@@ -110,7 +110,13 @@ export const HomePage = () => {
               <ArrowBackIosOutlinedIcon />
             </Button>
 
-            <VideoItem video={videoList[step]} setList={setVideoList} />
+            <VideoItem
+              video={videoList[step]}
+              setList={setVideoList}
+              containerBackground="black"
+              indent="10%"
+              autoplay={true}
+            />
 
             <Button
               sx={{

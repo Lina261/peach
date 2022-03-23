@@ -39,7 +39,7 @@ export const VideoItem = (props) => {
         alignItems: "center",
         justifyContent: "center",
         minWidth: "100%",
-        backgroundColor: "black",
+        backgroundColor: props.containerBackground,
       }}
     >
       <Container
@@ -47,16 +47,16 @@ export const VideoItem = (props) => {
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          marginLeft: "10%",
+          marginLeft: props.indent,
         }}
       >
         {video.photo.photo ? (
           <Avatar
             src={mediaUrl + video.photo.photo}
-            sx={{ width: 40, height: 40, margin: "10px" }}
+            sx={{ width: 40, height: 40, margin: "7px" }}
           />
         ) : (
-          <Avatar sx={{ width: 40, height: 40, margin: "10px" }} />
+          <Avatar sx={{ width: 40, height: 40, margin: "7px" }} />
         )}
         <Typography variant="subtitle2">{video.owner} </Typography>
       </Container>
@@ -66,15 +66,19 @@ export const VideoItem = (props) => {
         height="80%"
         style={{ display: "block" }}
         controls
-        autoPlay="true"
-        src={video?.videofile}
+        autoPlay={props.autoplay}
+        src={
+          video.videofile.includes(mediaUrl)
+            ? video.videofile
+            : mediaUrl + video.videofile
+        }
       />
 
       <div
         style={{
           backgroundColor: "black",
-          marginLeft: "5px",
-          width: "75%",
+          paddingLeft: "15px",
+          width: "80%",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",

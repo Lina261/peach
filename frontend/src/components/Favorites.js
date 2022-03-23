@@ -9,12 +9,13 @@ import { CssBaseline } from "@mui/material";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
+import { VideoItem } from "./VideoItem";
 
 export const Favorites = () => {
   const [header, setHeader] = useState("");
-  const [data, setData] = useState({
-    video: [],
-  });
+
+  const [videoList, setVideoList] = useState([]);
+
   useEffect(() => {
     fetchWithAuth(baseUrl + "home/", { method: "GET", headers: {} })
       .then((response) => {
@@ -40,7 +41,7 @@ export const Favorites = () => {
       .then((data) => {
         if (data) {
           console.log(data);
-          setData(data);
+          setVideoList(data);
         }
       });
   }, []);
@@ -66,35 +67,26 @@ export const Favorites = () => {
       </Box>
       <Container
         sx={{
-          marginTop: "20px",
+          paddingTop: "20px",
           justifyContent: "center",
           justifyItems: "center",
           display: "grid",
-          gridTemplateColumns: "300px 300px 300px",
+          gridTemplateColumns: "400px 400px 400px",
           gridGap: "20px 0",
           width: "100%",
+          height: "100%",
+          paddingBottom: "20px",
         }}
-        maxWidth="md"
       >
-        {data.length ? (
-          data.map((video) => (
-            <div style={{ backgroundColor: "black" }}>
-              <video width="280" style={{ marginBottom: 0 }} controls>
-                <source src={mediaUrl + video.videofile} type="video/mp4" />
-              </video>
-              <div style={{ backgroundColor: "black", marginLeft: "10px" }}>
-                <Typography
-                  sx={{
-                    color: "white",
-                    fontWeight: "bold",
-                    fontStyle: "italic",
-                    paddingBottom: "5px",
-                  }}
-                >
-                  {video.title}
-                </Typography>
-              </div>
-            </div>
+        {videoList.length ? (
+          videoList.map((video) => (
+            <VideoItem
+              key={video.name}
+              video={video}
+              setList={setVideoList}
+              indent="5%"
+              autoplay={false}
+            />
           ))
         ) : (
           <Container
