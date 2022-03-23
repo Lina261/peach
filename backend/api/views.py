@@ -212,7 +212,6 @@ class LikeView(APIView):
         try:
             Like.objects.create(video=video, liker=request.user.profile, like=like_status)
         except Exception:
-
             return Response(status.HTTP_400_BAD_REQUEST)
         return Response(status.HTTP_200_OK)
 
@@ -223,5 +222,7 @@ class Favorites(APIView):
         profile = request.user.profile
         likes = Like.objects.filter(liker=profile).filter(like=True)
         video_set = [like.video for like in likes]
-        serializer = CurrentUserVideoSerializer(video_set, many=True)
+        serializer = VideoSerializer(video_set, many=True, context={'request':request})
         return Response(serializer.data)
+
+

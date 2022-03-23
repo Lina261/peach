@@ -67,12 +67,6 @@ class PhotoSerializer(serializers.ModelSerializer):
         fields = ['photo']
 
 
-class LikeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Like
-        fields = '__all__'
-
-
 class CurrentUserVideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
